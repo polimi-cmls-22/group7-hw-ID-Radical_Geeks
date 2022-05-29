@@ -86,18 +86,25 @@ Don't foget also to download the MultiSense OSC application on your smartphone.
 
 ### MultisenseOSC Settings
 ## Android
-1. Open the MultisenseOSC application on your smartphone
-2. Insert the IP address of your PC and the port number '12000'; then click NEXT button
-3. Enable the Orientation in tha main menu of the app
-4. Click on the Orientation card in order to expand it
-5. Take the smartphone straight in front of the PC and then click OFFSET button
-6. Start the OSC clicking the start button on top
-7. If you have done everything right you will see the application like this:<br></br><img src="multisense.jpeg" alt="alert" height="400px">
+1. Open the MultisenseOSC application on your smartphone.
+  2. Insert the IP address of your PC and the port number '12000'; then click NEXT button.
+  3. Enable the Orientation in tha main menu of the app.
+  4. Click on the Orientation card in order to expand it.
+  5. Take the smartphone straight in front of the PC and then click OFFSET button to calibrate the device.
+  6. Start the OSC clicking the start button on top.
+  7. If you have done everything right you will see the application like this:<br></br><img src="multisense.jpeg" alt="alert" height="400px">.
 
 ## iOS
-1. Open the MultisenseOSC application on your smartphone
+1. Open the GyrOSC application on your smartphone
+  2. Insert the 'Target IP Address' of your PC, the port number '12000' and insert computer in the 'Tag' textcell.
+  3. Move to the second window from the left (in the bottom bar).
+  4. Switch to active the 'Gyroscope' and to not active all the others.
+  5. Set the 'Frequency' to 120Hz.
+  6. Pick up your phone and keep it paraller to the floor surface and then click the top icon to calibrate the device.
+  7. Now back in the first window you will see in the 'Sending' section the following line: /gyrosc/computer/gyro{pitch, roll, yaw}
 
-
+<img src="ios_1.jpg" alt="alert" height="600px">
+<img src="ios_2.jpg" alt="alert" height="600px">
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
