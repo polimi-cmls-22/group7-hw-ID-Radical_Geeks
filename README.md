@@ -103,8 +103,7 @@ Don't foget also to download the MultiSense OSC application on your smartphone.
   6. Pick up your phone and keep it paraller to the floor surface and then click the top icon to calibrate the device.
   7. Now back in the first window you will see in the 'Sending' section the following line: /gyrosc/computer/gyro{pitch, roll, yaw}
 
-<img src="ios_1.jpg" alt="alert" height="600px">
-<img src="ios_2.jpg" alt="alert" height="600px">
+<img src="ios_1.jpg" alt="alert" height="600px"> <img height="600" hspace="20"/> <img src="ios_2.jpg" alt="alert" height="600px">
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
