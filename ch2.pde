@@ -118,7 +118,7 @@ void setup() {
 
   // init variables and stuff, don't waste time there
 
-  m = 1;
+  m = 512;
   n = 12;
 
   currentBall = 0;
