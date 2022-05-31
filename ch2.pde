@@ -19,7 +19,6 @@ float speed; //speed of the song
 
 PImage bg; //background
 PImage gbg; //game background
-PImage pointerImg;
 
 OscP5 oscP5; //osc receiver
 Synth synth; //current synth
@@ -60,15 +59,13 @@ void setup() {
   size(700, 700);
   textAlign(CENTER, CENTER);
   
-  pointerImg = loadImage(dataPath("res/pointer.png"));
-  
   instrumentList = new String[5];
   
   instrumentList[0] = "piano";
   instrumentList[1] = "guitar";
-  instrumentList[2] = "bell";
-  instrumentList[3] = "flute";
-  instrumentList[4] = "tri";
+  instrumentList[2] = "piano2";
+  instrumentList[3] = "bell";
+  instrumentList[4] = "flute";
 
   configs = new HashMap < String, Float > ();
 
@@ -93,11 +90,11 @@ void setup() {
     for (int i = 0; i < filenames.length; ++i)
       temp[i] = filenames[i] + ";" + "1";
 
-    saveStrings(dataPath(confFile), temp);
+    saveStrings(confFile, temp);
   }
 
   // ACTUAL LOAD configs
-  String[] lines = loadStrings(dataPath(confFile));
+  String[] lines = loadStrings(confFile);
 
   for (int j = 0; j < lines.length; j++) {
     String[] temp = split(lines[j], ';');
@@ -113,7 +110,7 @@ void setup() {
     println("Loaded high scores");
   } else {
     String[] temp = {};
-    saveStrings(dataPath(savefile), temp);
+    saveStrings(savefile, temp);
   }
 
   bg = loadImage(dataPath("res/background.jpg"));
@@ -121,7 +118,7 @@ void setup() {
 
   // init variables and stuff, don't waste time there
 
-  m = 512;
+  m = 1;
   n = 12;
 
   currentBall = 0;
@@ -192,9 +189,8 @@ void setup() {
     .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
     .setColorBackground(color(0, 0, 0));
     
-  instrumentStr = "tri";
-  playSound(0, true); //preload sounds
-
+  instrumentStr = "piano";
+  playSound(0); //preload sounds
   /*
   Why am I doing this?
   Because otherwise the game stutters when the first ball is hit
@@ -203,6 +199,14 @@ void setup() {
   As a lucky bonus, it seems like a title screen sound fx
   Bug -> feature
   */
+
+  /*for (int i = 0; i < n; ++i) {
+    colors[i].r = (192 + 30 * i) % 256;
+    colors[i].g = (57 + 30 * i) % 256;
+    colors[i].b = (43 + 30 * i) % 256;
+  }*/
+   
+  
 }
 
 void Mode(int n) {
@@ -350,7 +354,7 @@ void draw() {
     stroke(0);
     
 
-    PFont font = createFont("arial bold", 15);
+    PFont font = createFont("arial", 13);
 
     // show score and combo
     fill(255);
@@ -371,7 +375,7 @@ void draw() {
     fill(0, 0, 0);
     strokeWeight(5);
     stroke(255);
-    image(pointerImg, line_x - 24, pointer_y - 24, 48, 48);
+    drawGradient(line_x, pointer_y, -1);
 
     for (int i = 0; i < numNotes; i = i + 1) {
       if(balls[i].pos >= 0 && balls[i].pos < width){
@@ -400,7 +404,7 @@ void draw() {
           if (last != null)
             last.free();
 
-          String[] lines = loadStrings(dataPath(savefile));
+          String[] lines = loadStrings(savefile);
 
           for (int j = 0; j < lines.length; j++) {
             String[] temp = split(lines[j], ';');
@@ -425,7 +429,7 @@ void draw() {
           PFont font2 = createFont("arial", 10);
 
           cp5.addTextfield("Username")
-            .setPosition(width / 2 - sizeX / 2, height / 2 - sizeY / 2 + 4 * height / 16)
+            .setPosition(width / 2 - sizeX / 2, height / 2 - sizeY / 2 + 4 * height / 23)
             .setSize(sizeX, sizeY)
             .setFont(font2)
             .setFocus(true)
@@ -439,12 +443,12 @@ void draw() {
           sizeY = 40;
 
           cp5.addBang("Submit")
-            .setPosition(width / 2 - sizeX / 2, height - sizeY / 2 - height / 8)
+            .setPosition(width / 2 - sizeX / 2, height - sizeY / 2 - height / 5)
             .setSize(sizeX, sizeY)
             .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
             
           cp5.addBang("Restart")
-            .setPosition(width / 2 - sizeX / 2, height - sizeY / 2 - 3 * height / 8)
+            .setPosition(width / 2 - sizeX / 2, height - sizeY / 2 - 3 * height / 32)
             .setSize(sizeX, sizeY)
             .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
         }
@@ -479,7 +483,7 @@ void oscEvent(OscMessage theOscMessage) {
       y = -1 + 10 * theOscMessage.get(1).floatValue();
     }
   } else {
-    if (theOscMessage.addrPattern().equals("/multisense/orientation/pitch")) {
+    if (theOscMessage.addrPattern().equals("/multisense/orientation/roll")) {
       y = theOscMessage.get(0).floatValue();
     }
   }
@@ -501,13 +505,13 @@ void oscEvent(OscMessage theOscMessage) {
           score += 5;
         combo++;
         balls[i].correct = true;
-        playSound(song[i].note, false);
+        playSound(song[i].note);
       }
     }
   }
 }
 
-void playSound(int n, boolean free) {
+void playSound(int n) {
   // free the last synth
   if (last != null)
     last.free();
@@ -522,11 +526,6 @@ void playSound(int n, boolean free) {
   synth.create();
 
   last = synth;
-  
-  if(free){
-    delay(500);
-    last.free();
-  }
 }
 
 // implement a class that sorts a map by values
@@ -569,7 +568,7 @@ public void Submit() {
     hsList.add(entry.getKey() + ";" + entry.getValue());
   }
 
-  saveStrings(dataPath(savefile), hsList.toArray(new String[hsList.size()]));
+  saveStrings(savefile, hsList.toArray(new String[hsList.size()]));
   cp5.get(Textfield.class, "Username").remove();
   cp5.get(Bang.class, "Submit").remove();
 }
@@ -579,11 +578,20 @@ void drawGradient(float x, float y, int note) {
    ellipseMode(RADIUS);
    noStroke();
 
+   if(note >= 0){
    float h = (21 * (note+1)) % 255;
    for (int r = radius; r > 0; --r) {
      fill(h, 90, 90);
      ellipse(x, y, r, r);
      h = (h + 1) % 360;
+   }
+   } else {
+   float h = 360;
+   for (int r = pointer_radius; r > 0; --r) {
+     fill(0, 0, h);
+     ellipse(x, y, r, r);
+     h = (h - 3) % 100;
+   }
    }
 
    colorMode(RGB,255,255,255);
